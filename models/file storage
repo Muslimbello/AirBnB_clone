@@ -1,0 +1,25 @@
+def reload(self):
+        with open("file.json", "r") as file:
+            content = json.load(file)
+            for key, value in content.items():
+                self.dict[key] = value
+                print(key, value)  # self.__dict__ = value
+
+	def new(self):
+        key = f"{self.__class__.__name__}.{self.id}"
+        return key
+
+    def save(self):
+        self.updated_at = str(datetime.now())
+        key = self.new()
+        self.dict[key] = self.to_dict()
+
+        with open("file.json", "w") as file:
+            json.dump(self.dict, file, indent=2)
+        print(f"serialized_obj{self.dict}")
+
+	def to_dict(self):
+        to_json = self.__dict__
+        to_json["__class__"] = self.__class__.__name__
+        return to_json
+
